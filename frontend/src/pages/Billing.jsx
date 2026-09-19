@@ -115,7 +115,7 @@ function Billing() {
         }
 
         const saleData = {
-            worker: user.id,
+            
             items: cart.map((item) => ({
                 product: item.product,
                 quantity: item.quantity
@@ -129,7 +129,8 @@ function Billing() {
                 {
                     method: "POST",
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                          Authorization: `Bearer ${localStorage.getItem("token")}`
                     },
                     body: JSON.stringify(saleData)
                 }

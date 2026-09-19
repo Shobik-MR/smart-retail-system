@@ -30,16 +30,20 @@ function Dashboard() {
             try {
 
                 // Get dashboard statistics
-                const statsResponse = await fetch(
-                    "http://localhost:5000/api/dashboard/stats"
-                );
+                const statsResponse = await fetch("http://localhost:5000/api/dashboard/stats", {
+    headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+    }
+})
 
                 const statsData = await statsResponse.json();
 
                 // Get worker performance
-                const workersResponse = await fetch(
-                    "http://localhost:5000/api/dashboard/workers"
-                );
+                const workersResponse = await fetch("http://localhost:5000/api/dashboard/workers", {
+    headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+    }
+})
 
                 const workersData = await workersResponse.json();
 
@@ -48,9 +52,11 @@ function Dashboard() {
 );
 
 const salesData = await salesResponse.json();
-const inventoryResponse = await fetch(
-    "http://localhost:5000/api/dashboard/inventory"
-);
+const inventoryResponse = awaitfetch("http://localhost:5000/api/dashboard/inventory", {
+    headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+    }
+})
 
 const inventoryData = await inventoryResponse.json();
 
@@ -188,6 +194,7 @@ setLoading(false);
      <td>
                     {product.minimumStock - product.stock}
                 </td>
+                
 
 </tr>
 

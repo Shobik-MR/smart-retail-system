@@ -1,12 +1,16 @@
 const express = require("express");
 const Sale = require("../models/Sale");
 const Product = require("../models/Product");
-
+const protect = require("../middleware/authMiddleware");
+const authorizeRole = require("../middleware/roleMiddleware");
 
 const router = express.Router();
 
 // DASHBOARD STATISTICS
-router.get("/stats", async (req, res) => {
+router.get("/stats",
+     protect,
+    authorizeRole("manager"),
+     async (req, res) => {
     try {
 
         // Get all sales
@@ -78,7 +82,10 @@ router.get("/stats", async (req, res) => {
 });
 
 // WORKER PERFORMANCE
-router.get("/workers", async (req, res) => {
+router.get("/workers", 
+     protect,
+    authorizeRole("manager"),
+    async (req, res) => {
     try {
 
         const sales = await Sale.find()
@@ -131,7 +138,10 @@ router.get("/workers", async (req, res) => {
 });
 
 // Inventory analytics
-router.get("/inventory", async (req, res) => {
+router.get("/inventory",
+     protect,
+    authorizeRole("manager"),
+     async (req, res) => {
     try {
 
         const products = await Product.find();

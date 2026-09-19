@@ -1,16 +1,16 @@
 const express = require("express");
 const Sale = require("../models/Sale");
 const Product = require("../models/Product");
-
+const protect = require("../middleware/authMiddleware");
 const router = express.Router();
 
 // CREATE SALE / BILL
-router.post("/", async (req, res) => {
+router.post("/",protect,async (req, res) => {
     try {
-        const { worker, items } = req.body;
+        const {  items } = req.body;
 
         // Basic validation
-        if (!worker || !items || items.length === 0) {
+        if ( !items || items.length === 0) {
             return res.status(400).json({
                 message: "Worker and items are required"
             });
@@ -69,10 +69,10 @@ router.post("/", async (req, res) => {
 
         // Create sale
         const sale = await Sale.create({
-            worker: worker,
+            worker: req.user.Id,
             items: saleItems,
-            totalAmount: totalAmount,
-            totalProfit: totalProfit
+            totalAmount,
+            totalProfit
         });
 
         res.status(201).json({
@@ -90,7 +90,7 @@ router.post("/", async (req, res) => {
     }
 });
 // GET ALL SALES
-router.get("/", async (req, res) => {
+router.get("/",async (req, res) => {
     try {
         const sales = await Sale.find()
             .populate("worker", "name email")

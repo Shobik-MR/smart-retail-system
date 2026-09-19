@@ -1,5 +1,7 @@
 const express = require("express");
 const Product = require("../models/Product");
+const protect = require("../middleware/authMiddleware");
+const authorizeRole = require("../middleware/roleMiddleware");
 
 const router = express.Router();
 
@@ -7,7 +9,8 @@ const router = express.Router();
 // ===============================
 // ADD PRODUCT
 // ===============================
-router.post("/", async (req, res) => {
+router.post("/", protect,authorizeRole("manager"),
+async (req, res) => {
     try {
         const {
             name,
@@ -61,7 +64,7 @@ router.post("/", async (req, res) => {
 // ===============================
 // GET ALL PRODUCTS
 // ===============================
-router.get("/", async (req, res) => {
+router.get("/",protect, async (req, res) => {
     try {
         const products = await Product.find();
 
@@ -79,7 +82,7 @@ router.get("/", async (req, res) => {
 // ===============================
 // GET ONE PRODUCT
 // ===============================
-router.get("/:id", async (req, res) => {
+router.get("/:id",protect, async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
 
@@ -103,7 +106,7 @@ router.get("/:id", async (req, res) => {
 // ===============================
 // UPDATE PRODUCT
 // ===============================
-router.put("/:id", async (req, res) => {
+router.put("/:id",protect,authorizeRole("manager"),async (req, res) => {
     try {
         const product = await Product.findByIdAndUpdate(
             req.params.id,
@@ -137,7 +140,8 @@ router.put("/:id", async (req, res) => {
 // ===============================
 // DELETE PRODUCT
 // ===============================
-router.delete("/:id", async (req, res) => {
+router.delete("/:id",protect,authorizeRole("manager"),
+async (req, res) => {
     try {
         const product = await Product.findByIdAndDelete(req.params.id);
 
